@@ -9,6 +9,12 @@
 - `main`（默认分支）：存放项目全部内容——源码、美术与音频素材、项目文档与截图
 - `doc`：文档分支，存放 [可行性分析](可行性分析.txt)、[流程图](洛克王国流程图终版.excalidraw)、[需求文档](需求文档最终.xlsx) 与 [README](README.md)（含 `docs/screenshots` 截图）
 
+## 快速开始
+
+1. 从 [easyx.cn](https://easyx.cn/) 下载并安装 **EasyX**（安装时选择本机对应的 Visual Studio 版本）
+2. 用 Visual Studio 打开 **`RocoKingdom/RocoKingdom.slnx`**
+3. 选择 `Debug | x64` 配置，按 F5 运行（详细说明见[构建与运行](#构建与运行)）
+
 ## 界面预览
 
 | 主菜单 | 队伍配置 |
