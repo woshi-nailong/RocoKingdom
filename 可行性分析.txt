@@ -1,0 +1,332 @@
+1. 技术(考虑组员学习进度)
+	基础进度要求:
+		C++ 面向对象(class、enum、string、vector)
+		
+		学习情况: 全员达到进度要求
+	
+	额外技术:
+		使用 EasyX 作为图形界面
+			目前(组员1), (组员2), (组员3)完成了EasyX练习题
+			(组员4)和(组员5)在学习EasyX中
+		
+		使用文件流作为数据存储(skill_database.txt / player1_config.txt / player2_config.txt)
+			目前(组员1), (组员2), (组员3)完成了文件流练习题
+
+
+2. 功能描述(核心功能)
+	注意:
+		项目的核心功能是指: 必不可少的功能, 缺乏后程序无法正常运行的内容
+	
+	该项目是一个双人对战宠物游戏, 支持队伍配置和回合制对战。
+	
+	主菜单界面:
+		进入界面后, 玩家可以选择:
+			开始对战 → 进入对战界面
+			队伍配置 → 进入队伍配置界面
+			游戏说明 → 显示规则说明
+			退出游戏
+	
+	队伍配置界面:
+		选择玩家(玩家1 / 玩家2)
+		选择宠物(从数据库中挑选3只)
+		修改技能(每只宠物4个技能槽)
+		修改性格(影响属性加成)
+		保存配置 → 返回主菜单
+	
+	对战界面:
+		玩家1选择首发宠物
+		玩家2选择首发宠物
+		
+		进入回合循环, 每回合两个玩家各自选择操作:
+			使用技能:
+				选择四个技能之一
+				判断当前能量是否足够
+					能量足够 → 记录操作
+					能量不足 → 提示后重新选择
+			聚能:
+				不攻击, 回复能量
+			更换宠物:
+				替换场上宠物为队伍中其他存活宠物
+			逃跑:
+				放弃对战, 游戏结束
+		
+		双方操作确认后, 回合统一结算:
+			根据速度决定出手顺序
+			执行双方操作
+			根据属性克制关系计算伤害倍率(克制×2 / 正常×1 / 抵抗×0.5)
+			计算最终伤害 → 扣除生命值 → 扣除能量
+			判断宠物是否阵亡 → 阵亡则重新选择出战宠物
+			判断一方三只宠物是否全部阵亡 → 若是, 游戏结束
+		
+		战斗结束后显示胜利界面, 返回主菜单
+	
+	界面说明:
+		游戏包含以下界面类:
+			MainMenuScene(主菜单): 绘制背景和四个按钮
+			TeamConfigScene(队伍配置): 选择宠物/技能/性格
+			BattleScene(对战界面): 绘制双方宠物信息和操作菜单
+			ResultScene(结果界面): 显示胜利方
+		
+		按钮类(Button):
+			记录坐标(x, y)和尺寸(width, height)
+			处理鼠标消息(ExMessage)
+			显示按钮文本(wchar_t)
+
+
+3. 是否能实现(数据的完整设计+功能的大致逻辑)
+	1. 数据的完整设计
+		// ── 属性枚举 ──
+		enum PropertyType {
+			FIRE,    // 火属性
+			WATER,   // 水属性
+			GRASS,   // 草属性
+			NONE     // 无属性
+		};
+
+		// ── 技能类型枚举 ──
+		enum SkillType {
+			ATTACK,   // 攻击类
+			STATUS,   // 状态类
+			DEFENSE,  // 防御类
+			COUNTER   // 应对类
+		};
+
+		// ── 宠物性格枚举(影响属性加成) ──
+		enum NatureType {
+			LONELY,   // 孤僻: 攻击+10%, 防御-10%
+			BRAVE,    // 勇敢: 攻击+10%, 速度-10%
+			NAUGHTY,  // 调皮: 攻击+10%, 魔防-10%
+			MODEST,   // 保守: 魔攻+10%, 攻击-10%
+			CALM,     // 冷静: 魔攻+10%, 速度-10%
+			BOLD,     // 大胆: 防御+10%, 攻击-10%
+			TIMID     // 胆小: 速度+10%, 攻击-10%
+		};
+
+		// ── 操作类型枚举 ──
+		enum Operation {
+			FIRSTSKILL,
+			SECONDSKILL,
+			THIRDSKILL,
+			FORTHSKILL,
+			CHANGEPET,
+			GATHERING,
+			CONSUME,
+			ESCAPE
+		};
+
+		// ── 技能类 ──
+		class Skill {
+		public:
+			std::string name;          // 技能名称
+			PropertyType element;      // 技能属性
+			SkillType category;        // 技能类型(攻击/状态/防御/应对)
+			int power;                 // 技能威力
+			int epCost;                // 能量消耗
+			std::string description;   // 技能描述
+		};
+
+		// ── 宠物类 ──
+		class Pet {
+		public:
+			std::string name;          // 宠物名称
+			PropertyType element;      // 属性
+			int maxHp;                 // 最大生命值
+			int atk;                   // 物理攻击
+			int def;                   // 物理防御
+			int spAtk;                 // 魔法攻击
+			int spDef;                 // 魔法防御
+			int speed;                 // 速度(决定出手顺序)
+			int currentHp;             // 当前生命值
+			int currentEp;             // 当前能量值
+			NatureType nature;         // 性格
+			Skill skills[4];           // 四个技能槽
+		};
+
+		// ── 玩家类 ──
+		class Player {
+		public:
+			int playerID;              // 玩家编号(1或2)
+			Pet playerPet[3];           // 三只宠物
+			int nowPetID;              // 当前出战宠物索引(0/1/2)
+		};
+
+		// ── 战斗类 ──
+		class Battle {
+		public:
+			Player p1;                 // 玩家1
+			Player p2;                 // 玩家2
+			int round;                 // 当前回合数
+			Operation p1Ops;           // 玩家1本回合操作缓存
+			Operation p2Ops;           // 玩家2本回合操作缓存
+			bool isWin();              // 判断游戏是否结束
+		};
+
+		// ── 游戏主控类 ──
+		class Game {
+		public:
+			void init();               // 游戏初始化(形参有待商议)
+			void sceneChange();        // 场景切换
+			void dataLoad();           // 数据读取
+			void dataSave();           // 数据保存
+			void run();                // 游戏运行(战斗循环)
+		};
+
+		// ── 按钮类(场景组件) ──
+		class Button {
+		public:
+			int x;                     // 横坐标
+			int y;                     // 纵坐标
+			int width;                 // 宽度
+			int height;                // 高度
+			ExMessage* mes;            // 消息处理
+			const wchar_t* text;       // 按钮文本
+		};
+
+		// ── 主菜单界面类 ──
+		class MainMenuScene {
+		public:
+			IMAGE m_back;              // 背景图片
+			Button btns[4];           // 四个按钮(开始对战/队伍配置/游戏说明/退出)
+			
+			void draw();               // 绘制函数
+			void update();             // 逻辑更新
+		};
+
+		// ── 其他界面类 ──
+		// TeamConfigScene / BattleScene / ResultScene 结构类似, 均包含:
+		//     背景图片(IMAGE)
+		//     按钮数组(Button[])
+		//     绘制函数(draw)和逻辑更新函数(update)
+
+		// ── 全局数据声明 ──
+		// 宠物数据库(从 pet_database.txt 读取)
+		Pet petDatabase[100];
+		int petCount = 0;
+
+		// 技能数据库(从 skill_database.txt 读取)
+		Skill skillDatabase[100];
+		int skillCount = 0;
+
+		// 属性克制关系表
+		// typeChart[i][j] 表示属性i攻击属性j的伤害倍率
+		// 示例: typeChart[FIRE][GRASS] = 2.0  // 火克制草
+		//       typeChart[FIRE][WATER] = 0.5  // 火被水抵抗
+		float typeChart[4][4];
+
+		// 玩家配置文件
+		// player1_config.txt
+		// player2_config.txt
+
+	2. 逻辑的思路描述(根据核心功能的描述 讲一下核心逻辑是如何处理的)
+		思路可以参考文档[项目常用技巧]->2.项目的主体结构划分
+		
+		宠物对战核心逻辑(){
+			实例化游戏类;
+			game.init();       // 初始化游戏资源
+			game.dataLoad();   // 读取宠物/技能数据
+			
+			while(1){
+				主菜单界面:
+					MainMenuScene.draw();   // 绘制背景和四个按钮
+					MainMenuScene.update(); // 检测鼠标点击
+					
+					给玩家选择:
+						开始对战 / 队伍配置 / 游戏说明 / 退出游戏
+				
+				if(队伍配置){
+					选择玩家
+					选择宠物(从数据库中挑选3只)
+					修改技能(每只宠物4个技能槽)
+					修改性格(影响属性加成)
+					保存配置 → 写入 player_config.txt
+					返回主菜单
+				}
+				else if(开始对战){
+					玩家1选择首发宠物
+					玩家2选择首发宠物
+					
+					初始化生命值(当前生命值 = 最大生命值)
+					初始化能量值(当前能量值 = 0)
+					
+					game.run();   // 进入战斗循环
+				}
+				else if(游戏说明){
+					显示规则说明界面
+				}
+				else if(退出游戏){
+					退出程序
+				}
+			}
+		}
+		
+		战斗循环(game.run() 内部逻辑){
+			while(游戏未结束){
+				
+				BattleScene.draw();   // 绘制战斗界面(双方宠物/HP/能量/操作菜单)
+				
+				// ── 玩家1选择操作 ──
+				BattleScene.update();   // 检测玩家1的鼠标/键盘输入
+				if(玩家1选择技能){
+					if(当前能量 >= 技能能量消耗){
+						保存本回合操作至 p1Ops
+					}else{
+						提示"能量不足"
+						返回重新选择
+					}
+				}
+				else if(玩家1选择聚能){
+					保存聚能操作至 p1Ops
+				}
+				else if(玩家1选择更换宠物){
+					保存更换宠物操作至 p1Ops
+				}
+				else if(玩家1选择逃跑){
+					游戏结束(玩家2胜利)
+				}
+				
+				// 隐藏出招: 界面遮盖, 提示"请玩家2操作"
+				
+				// ── 玩家2选择操作(同上) ──
+				...
+				
+				// ── 回合统一结算 ──
+				执行玩家1操作;
+				执行玩家2操作;
+				根据双方操作计算技能效果;
+				判断属性克制关系(查 typeChart 表);
+				计算技能伤害;
+				更新双方生命值;
+				更新双方能量值;
+				
+				if(宠物阵亡){
+					重新选择出战宠物;
+				}
+				if(一方三只宠物全部阵亡){
+					游戏结束;
+				}
+				
+				round++;
+			}
+			
+			显示胜利界面;
+			返回主菜单;
+		}
+		
+		补充:
+			1. 隐藏出招机制(公平性保证):
+				玩家1操作确认后 → 界面遮盖操作内容 → 切换等待界面 → 玩家2操作
+				双方操作缓存(p1Ops, p2Ops)只在回合统一结算时使用, 不对外暴露
+			
+			2. 速度决定出手顺序:
+				速度快的一方先出手
+				如果先手方攻击导致后手方宠物阵亡, 后手方本回合的攻击仍然结算
+			
+			3. 属性克制倍率:
+				FIRE(火) 攻击 GRASS(草) → 倍率×2.0(克制)
+				FIRE(火) 攻击 WATER(水) → 倍率×0.5(被抵抗)
+				同属性攻击 → 倍率×1.0(正常)
+			
+			4. 伤害计算公式:
+				damage = 技能威力 × 克制倍率 × (攻击方攻击力 / 防御方防御力) × 随机系数
+				物攻技能: 攻击方atk / 防御方def
+				魔攻技能: 攻击方spAtk / 防御方spDef
