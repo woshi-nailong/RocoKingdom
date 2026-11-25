@@ -1,0 +1,8 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# 构建产物
+x64/
+RocoKingdom/RocoKingdom/x64/

@@ -1,0 +1,74 @@
+{
+    "playerList": [
+        {
+            "playerID": 1,
+            "playerPet": [
+                {
+                    "buffStart": 2,
+                    "debuffStart": 6,
+                    "skill": [
+                        8,
+                        2,
+                        3,
+                        5
+                    ]
+                },
+                {
+                    "buffStart": 6,
+                    "debuffStart": 2,
+                    "skill": [
+                        6,
+                        8,
+                        4,
+                        2
+                    ]
+                },
+                {
+                    "buffStart": 1,
+                    "debuffStart": 6,
+                    "skill": [
+                        8,
+                        1,
+                        2,
+                        5
+                    ]
+                }
+            ]
+        },
+        {
+            "playerID": 2,
+            "playerPet": [
+                {
+                    "buffStart": 6,
+                    "debuffStart": 4,
+                    "skill": [
+                        0,
+                        9,
+                        4,
+                        5
+                    ]
+                },
+                {
+                    "buffStart": 6,
+                    "debuffStart": 2,
+                    "skill": [
+                        7,
+                        4,
+                        6,
+                        0
+                    ]
+                },
+                {
+                    "buffStart": 4,
+                    "debuffStart": 6,
+                    "skill": [
+                        8,
+                        3,
+                        5,
+                        6
+                    ]
+                }
+            ]
+        }
+    ]
+}

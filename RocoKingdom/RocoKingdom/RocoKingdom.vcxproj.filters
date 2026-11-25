@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Model">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Service">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="View">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{5410D7A2-C5B2-4B44-B4B6-3E35A5E1F823}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="thirdlib">
+      <UniqueIdentifier>{8B2E1A2C-9F45-4A2D-8E12-7C4A5F6B7C8D}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Model\type.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Model\Action.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Model\StatusEffect.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Model\Skill.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Model\PetTemplate.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Model\Pet.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Model\Player.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Service\BattleService.h">
+      <Filter>Service</Filter>
+    </ClInclude>
+    <ClInclude Include="Service\DataService.h">
+      <Filter>Service</Filter>
+    </ClInclude>
+    <ClInclude Include="View\MainMenuScene.h">
+      <Filter>View</Filter>
+    </ClInclude>
+    <ClInclude Include="View\TeamConfigScene.h">
+      <Filter>View</Filter>
+    </ClInclude>
+    <ClInclude Include="View\PetChoiceScene.h">
+      <Filter>View</Filter>
+    </ClInclude>
+    <ClInclude Include="View\BattleScene.h">
+      <Filter>View</Filter>
+    </ClInclude>
+    <ClInclude Include="View\ResultScene.h">
+      <Filter>View</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>View</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdlib\json\json.hpp">
+      <Filter>thirdlib</Filter>
+    </ClInclude>
+    <ClInclude Include="Service\GameData.h">
+      <Filter>Service</Filter>
+    </ClInclude>
+    <ClInclude Include="View\GameIntroduce.h">
+      <Filter>View</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="player_save.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BattleService.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MainMenuScene.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DataService.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GameData.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="PetChoiceScene.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ResultScene.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BattleScene.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TeamConfigScene.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GameIntroduce.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
